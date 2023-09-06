@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: RoadWarrior Backend API
+Resources:
+    RoadWarriorBackendFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            Handler: main
+            CodeUri: s3://roadwarrior-deployment-bucket/a6d5b9f427822a752b8b9028cee623bb
+            Runtime: go1.x
+            MemorySize: 128
+            Policies: AWSLambdaBasicExecutionRole
+            Timeout: 3
+            Events:
+                GetResource:
+                    Type: Api
+                    Properties:
+                        Path: /{proxy+}
+                        Method: any
+Outputs:
+    RoadWarriorBackendAPI:
+        Description: URL for application
+        Value:
+            Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/pets
+        Export:
+            Name: RoadWarriorBackendAPI
